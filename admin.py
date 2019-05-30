@@ -62,15 +62,14 @@ async def warn(ctx) :
                         reason += arg + " "
                     warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number, got_kicked = warn_user(message.guild, message.author.id, id, reason)
+                    await ctx.send(content="*User {} has been warned for {}*".format(member.name, reason))
                     if got_kicked :
-                        await ctx.send(content="*User {} has been kicked...*".format(member.name))
+                        await ctx.send(content="*User {} has been kicked for too many warns*".format(member.name))
                         try :
                             await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
                         except Exception :
                             await ctx.send(content="*Unable to send {} the kick message, he might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
                         await member.kick()
-                    else :
-                        await ctx.send(content="*User {} has been warned...*".format(member.name))
                     try :
                         msg = await warn_channel.send(embed=embed)
                         configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
@@ -103,7 +102,7 @@ async def kick(ctx) :
                         reason += arg + " "
                     warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number = kick_user(message.guild, message.author.id, id, reason)
-                    await ctx.send(content="*User {} has been kicked...*".format(member.name))
+                    await ctx.send(content="*User {} has been kicked for {}*".format(member.name, reason))
                     try :
                         await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
                     except Exception :
@@ -138,7 +137,7 @@ async def ban(ctx) :
                         reason += arg + " "
                     warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number = ban_user(message.guild, message.author.id, id, reason)
-                    await ctx.send(content="*User {} has been banned...*".format(member.name))
+                    await ctx.send(content="*User {} has been banned for {}*".format(member.name, reason))
                     try :
                         await member.send(content=configs[message.guild.id]["BanMessage"].format(guild=message.guild.name, user=member.name))
                     except Exception :
